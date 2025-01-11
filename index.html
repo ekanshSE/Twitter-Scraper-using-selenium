@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0a85d8;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #0077b6;
+            color: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Twitter Scraper</h1>
+    <button onclick="startScraper()">Fetch Twitter Trends</button>
+    <div class="results" id="results"></div>
+
+    <script>
+        async function startScraper() {
+            document.getElementById('results').innerHTML = 'Fetching trends...';
+            try {
+                const response = await fetch('http://localhost:8000/scrape');  // Ensure this is correct URL
+                const data = await response.json();
+                if (data.success) {
+                    const trends = data.trends;
+                    let html = '<h2>Top 5 Twitter Trends:</h2><ul>';
+                    trends.forEach(trend => {
+                        html += `<li>${trend}</li>`;
+                    });
+                    html += '</ul>';
+                    document.getElementById('results').innerHTML = html;
+                } else {
+                    document.getElementById('results').innerHTML = 'Failed to fetch trends.';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML = 'Error connecting to scraper.';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
